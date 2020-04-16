@@ -32,6 +32,15 @@ class _QuizPageState extends State<QuizPage> {
     Icon(Icons.close, color: Colors.red),
   ];
 
+  /// possible questions to ask
+  List<String> questions = [
+    'You can lead a cow down stairs but not up stairs.',
+    'Approximately one quarter of human bones are in the feet.',
+    'A slug\'s blood is green.',
+  ];
+
+  int questionNumber = 0;
+
   /// Build a little Icon widget with the right icon and color based on if the answer was [correct].
   Icon answer(bool correct) {
     return Icon(correct ? Icons.check : Icons.close,
@@ -50,7 +59,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                'This is where the question text will go.',
+                questions[questionNumber],
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -76,6 +85,7 @@ class _QuizPageState extends State<QuizPage> {
               onPressed: () {
                 setState(() {
                   scoreKeeper.add(answer(true));
+                  questionNumber++;
                 });
               },
             ),
@@ -97,6 +107,7 @@ class _QuizPageState extends State<QuizPage> {
                 //The user picked false.
                 setState(() {
                   scoreKeeper.add(answer(false));
+                  questionNumber++;
                 });
               },
             ),
