@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'quiz_brain.dart';
+
+QuizBrain quizBrain = QuizBrain();
 
 void main() => runApp(Quizzler());
 
@@ -32,13 +35,6 @@ class _QuizPageState extends State<QuizPage> {
     Icon(Icons.close, color: Colors.red),
   ];
 
-  /// possible questions to ask
-  List<String> questions = [
-    'You can lead a cow down stairs but not up stairs.',
-    'Approximately one quarter of human bones are in the feet.',
-    'A slug\'s blood is green.',
-  ];
-
   int questionNumber = 0;
 
   /// Build a little Icon widget with the right icon and color based on if the answer was [correct].
@@ -59,7 +55,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                questions[questionNumber],
+                quizBrain.questions[questionNumber].questionText,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -84,7 +80,14 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
-                  scoreKeeper.add(answer(true));
+                  // true clicked...do we match?
+                  if (quizBrain.questions[questionNumber].questionAnswer ==
+                      true) {
+                    scoreKeeper.add(answer(true));
+                  } else {
+                    scoreKeeper.add(answer(false));
+                  }
+
                   questionNumber++;
                 });
               },
@@ -106,7 +109,13 @@ class _QuizPageState extends State<QuizPage> {
               onPressed: () {
                 //The user picked false.
                 setState(() {
-                  scoreKeeper.add(answer(false));
+                  // false clicked...do we match?
+                  if (quizBrain.questions[questionNumber].questionAnswer ==
+                      false) {
+                    scoreKeeper.add(answer(true));
+                  } else {
+                    scoreKeeper.add(answer(false));
+                  }
                   questionNumber++;
                 });
               },
