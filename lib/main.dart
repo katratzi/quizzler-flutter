@@ -39,12 +39,6 @@ class _QuizPageState extends State<QuizPage> {
 
   void checkAnswer(bool usersAnswer, BuildContext context) {
     setState(() {
-      // true clicked...do we match?
-      if (quizBrain.getQuestionAnswer() == usersAnswer) {
-        scoreKeeper.add(answer(true));
-      } else {
-        scoreKeeper.add(answer(false));
-      }
       // are we at the last question?
       if (quizBrain.isFinished()) {
         // show alert
@@ -55,6 +49,13 @@ class _QuizPageState extends State<QuizPage> {
         // empty the score
         scoreKeeper.clear();
       } else {
+        // true clicked...do we match?
+        if (quizBrain.getQuestionAnswer() == usersAnswer) {
+          scoreKeeper.add(answer(true));
+        } else {
+          scoreKeeper.add(answer(false));
+        }
+
         quizBrain.nextQuestion();
       }
     });
