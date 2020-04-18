@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'quiz_brain.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 QuizBrain quizBrain = QuizBrain();
 
@@ -28,17 +29,35 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  List<Icon> scoreKeeper = [
-    Icon(Icons.check, color: Colors.green),
-    Icon(Icons.check, color: Colors.green),
-    Icon(Icons.close, color: Colors.red),
-    Icon(Icons.close, color: Colors.red),
-  ];
+  List<Icon> scoreKeeper = [];
 
   /// Build a little Icon widget with the right icon and color based on if the answer was [correct].
   Icon answer(bool correct) {
     return Icon(correct ? Icons.check : Icons.close,
         color: correct ? Colors.green : Colors.red);
+  }
+
+  void checkAnswer(bool usersAnswer, BuildContext context) {
+    setState(() {
+      // true clicked...do we match?
+      if (quizBrain.getQuestionAnswer() == usersAnswer) {
+        scoreKeeper.add(answer(true));
+      } else {
+        scoreKeeper.add(answer(false));
+      }
+      // are we at the last question?
+      if (quizBrain.isFinished()) {
+        // show alert
+        Alert(context: context, title: "Game Over", desc: "The quiz is over!")
+            .show();
+        // reset the quiz
+        quizBrain.reset();
+        // empty the score
+        scoreKeeper.clear();
+      } else {
+        quizBrain.nextQuestion();
+      }
+    });
   }
 
   @override
@@ -77,15 +96,8 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                setState(() {
-                  // true clicked...do we match?
-                  if (quizBrain.getQuestionAnswer() == true) {
-                    scoreKeeper.add(answer(true));
-                  } else {
-                    scoreKeeper.add(answer(false));
-                  }
-                  quizBrain.nextQuestion();
-                });
+                // user picked true
+                checkAnswer(true, context);
               },
             ),
           ),
@@ -104,15 +116,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked false.
-                setState(() {
-                  // false clicked...do we match?
-                  if (quizBrain.getQuestionAnswer() == false) {
-                    scoreKeeper.add(answer(true));
-                  } else {
-                    scoreKeeper.add(answer(false));
-                  }
-                  quizBrain.nextQuestion();
-                });
+                checkAnswer(false, context);
               },
             ),
           ),

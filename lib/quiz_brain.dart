@@ -37,7 +37,15 @@ class QuizBrain {
     }
   }
 
+  bool isFinished() {
+    return _questionNumber == _questions.length - 1;
+  }
+
   String getQuestionText() => _questions[_questionNumber].questionText;
 
   bool getQuestionAnswer() => _questions[_questionNumber].questionAnswer;
+
+  void reset() {
+    _questionNumber = 0;
+  }
 }
